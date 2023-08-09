@@ -12,7 +12,6 @@ class CarViewSet(viewsets.ModelViewSet):
 
 class MotoCreateApiView(generics.CreateAPIView):
     serializer_class = MotoSerializer
-    # queryset = Moto.objects.all()
 
 
 class MotoListApiView(generics.ListAPIView):
