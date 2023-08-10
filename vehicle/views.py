@@ -1,7 +1,7 @@
 from rest_framework import viewsets, generics
 
 from vehicle.models import Car, Moto
-from vehicle.serializers import CarSerializer, MotoSerializer
+from vehicle.serializers import CarSerializer, MotoSerializer, MilageSerializer
 
 
 # Create your views here.
@@ -31,3 +31,7 @@ class MotoUpdateApiView(generics.UpdateAPIView):
 
 class MotoDestroyApiView(generics.DestroyAPIView):
     queryset = Moto.objects.all()
+
+
+class MilageCreateApiView(generics.CreateAPIView):
+    serializer_class = MilageSerializer
