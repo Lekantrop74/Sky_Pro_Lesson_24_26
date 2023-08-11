@@ -1,7 +1,9 @@
+from django.views import generic
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
-
-from vehicle.models import Car, Moto
-from vehicle.serializers import CarSerializer, MotoSerializer, MilageSerializer
+from rest_framework.filters import OrderingFilter
+from vehicle.models import Car, Moto, Milage
+from vehicle.serializers import *
 
 
 # Create your views here.
@@ -11,7 +13,7 @@ class CarViewSet(viewsets.ModelViewSet):
 
 
 class MotoCreateApiView(generics.CreateAPIView):
-    serializer_class = MotoSerializer
+    serializer_class = MotoCreateSerializer
 
 
 class MotoListApiView(generics.ListAPIView):
@@ -35,3 +37,16 @@ class MotoDestroyApiView(generics.DestroyAPIView):
 
 class MilageCreateApiView(generics.CreateAPIView):
     serializer_class = MilageSerializer
+
+
+class MilageListApiView(generics.ListAPIView):
+    serializer_class = MilageSerializer
+    queryset = Milage.objects.all()
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ('car', 'moto')
+    ordering_fields = ('year',)
+
+
+class MotoMilageListApiView(generics.ListAPIView):
+    queryset = Milage.objects.filter(moto__isnull=False)
+    serializer_class = MotoMilageSerializer
