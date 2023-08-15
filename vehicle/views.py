@@ -1,8 +1,9 @@
-from django.views import generic
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter
-from vehicle.models import Car, Moto, Milage
+from rest_framework.permissions import IsAuthenticated
+
+from vehicle.permissions import IsOwnerOrStaff
 from vehicle.serializers import *
 
 
@@ -10,10 +11,17 @@ from vehicle.serializers import *
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class MotoCreateApiView(generics.CreateAPIView):
     serializer_class = MotoCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        new_moto = serializer.save()
+        new_moto.owner = self.request.user
+        new_moto.save()
 
 
 class MotoListApiView(generics.ListAPIView):
@@ -29,6 +37,7 @@ class MotoRetrieveApiView(generics.RetrieveAPIView):
 class MotoUpdateApiView(generics.UpdateAPIView):
     serializer_class = MotoSerializer
     queryset = Moto.objects.all()
+    permission_classes = [IsOwnerOrStaff]
 
 
 class MotoDestroyApiView(generics.DestroyAPIView):
@@ -37,6 +46,7 @@ class MotoDestroyApiView(generics.DestroyAPIView):
 
 class MilageCreateApiView(generics.CreateAPIView):
     serializer_class = MilageSerializer
+
 
 
 class MilageListApiView(generics.ListAPIView):
