@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'drf_yasg',
+    "corsheaders",
+
     'rest_framework',
     'django_filters',
     'vehicle',
@@ -61,6 +64,9 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -143,3 +149,17 @@ AUTH_USER_MODEL = "users.User"
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/users/'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://read-only.example.com",
+    "https://read-and-write.example.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://read-and-write.example.com",
+]
+
+
+CUR_API_URL = os.getenv('CUR_API_URL')
+CUR_API_KEY = os.getenv('CUR_API_KEY')

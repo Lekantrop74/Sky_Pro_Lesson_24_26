@@ -1,6 +1,7 @@
 from django.views import generic
 from rest_framework import serializers
 from vehicle.models import Car, Moto, Milage
+from vehicle.services import convert_currencies
 from vehicle.validators import TitleValidator
 
 
@@ -13,10 +14,14 @@ class MilageSerializer(serializers.ModelSerializer):
 class CarSerializer(serializers.ModelSerializer):
     last_milage = serializers.IntegerField(source='milage.all.first.milage', read_only=True)
     milage = MilageSerializer(many=True, read_only=True)
+    usd_prise = serializers.SerializerMethodField()
 
     class Meta:
         model = Car
         fields = '__all__'
+
+    def get_usd_prise(self, instance):
+        return convert_currencies(instance.amount)
 
 
 class MotoSerializer(serializers.ModelSerializer):
